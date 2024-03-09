@@ -1,0 +1,21 @@
+name: Tests
+on:
+  push:
+jobs:
+  build-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install clang
+
+      - name: Checkout the repository
+        uses: actions/checkout@v3.5.3
+
+      - name: Configure the project
+        run: CC=clang CXX=clang++ cmake . -Bbuild
+
+      - name: Build the project
+        run: cmake --build build --parallel 16
+
+      - name: Test the project
+        run: ctest --test-dir build --output-on-failure -R ResourceTS
